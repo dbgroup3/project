@@ -22,49 +22,62 @@ var redirect_uri = 'http://35.172.254.68:8888/callback'; // Your redirect uri
 
 
 var engines = require('consolidate'); //Erin
-
+var connection;
 
 //ERIN
 // TODO:: Turn into function called when user firsts logs in
-oracledb.getConnection({
-    user: "guest",
-    password: "guest",
-    connectString: "localhost/XE"
-  },
-  function(err, connection) {
-    if (err) {
-      console.error(err.message);
-      return;
-    }
-    connection.execute(
-      `INSERT INTO users
-		 VALUES('0', 'Testing')`,
-
-      function(err, result) {
-        if (err) {
-          console.error(err.message);
-          doRelease(connection);
-          return;
-        }
-        connection.commit(
-          function(err) {
-            if (err) console.error(err.message);
-            connection.close(function(err) {
-              if (err) console.error(err);
-            });
-          });
-      });
-      //doRelease(connection);
-  });
-
-function doRelease(connection) {
+/**
+ * Creates connection to oracledb
+ * @param {string} SQL statement to be executed
+ * @param {function} cb Callback function
+ **/
+var doConnect = function(statement, cb) {
+  oracledb.getConnection({
+      user: "guest",
+      password: "guest",
+      connectString: "localhost/XE"
+    }, function(err, connection) {
+    cb(statement, connection)
+    } //aalways release connection at end
+  );
+};
+/**
+ * Releases existing DB connection
+ * @param {Object} connection oracledb connection object
+ **/
+var doRelease = function(connection) {
   connection.close(
     function(err) {
       if (err)
         console.error(err.message);
     });
-}
+};
+/** Executes statement on connection
+ *
+ * @param {string} statement SQL command to be executed
+ * @param {Object} connection Oracledb connection object
+ **/
+var doExecute = function(statement, connection) {
+  connection.execute(
+    statement,
+    function(err, result) {
+      if (err) {
+        console.error(err.message);
+      } else {
+      connection.commit(
+        function(err) {
+          if (err) {
+            console.error(err.message);
+          } else {
+            console.log("Execution successful for " + result.rowsAffected + " rows.");
+          }
+        });
+      }
+      doRelease(connection);
+    }
+    );
 
+};
 
 /**
  * Generates a random string containing numbers and letters
@@ -82,12 +95,16 @@ var generateRandomString = function(length) {
 };
 
 var stateKey = 'spotify_auth_state';
-
 var app = express();
 
 app.use(express.static(__dirname + '/public'))
   .use(cookieParser());
 
+/**
+* User Login Page
+* @param {string} endpoint access point
+* @param {function} doLogin callback function for login page
+**/
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
@@ -103,6 +120,10 @@ app.get('/login', function(req, res) {
       redirect_uri: redirect_uri,
       state: state
     }));
+    console.log("Login request");
+    doConnect(`INSERT INTO users
+		 VALUES('0', 'Testing')`, doExecute);
+
 });
 
 app.get('/callback', function(req, res) {
@@ -150,7 +171,7 @@ app.get('/callback', function(req, res) {
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-          console.log(body);
+          console.log(body.uri);
         });
 
         // we can also pass the token to the browser to make requests from there
