@@ -25,54 +25,44 @@ var engines = require('consolidate'); //Erin
 
 
 //ERIN
-
-oracledb.getConnection(
-    {
-	user : "guest",
-	password : "guest",
-	connectString : "localhost/XE"
-    },
-    function(err, connection) {
+// TODO:: Turn into function called when user firsts logs in
+oracledb.getConnection({
+    user: "guest",
+    password: "guest",
+    connectString: "localhost/XE"
+  },
+  function(err, connection) {
     if (err) {
       console.error(err.message);
       return;
     }
-	 connection.execute(
-		`INSERT INTO users
-		 VALUES('0', 'Testing')`,
-		function(err, result) {
-        if (err) {
-          console.error(err.message);
-          doRelease(connection);
-          return;
-        }
-        console.log(result.rows);
-	//doRelease(connection);
-      });
     connection.execute(
-      /*`SELECT cust_id, cust_name, city, country
-       FROM customer
-       WHERE cust_id = :id`,
-      [105],  // bind value for :id*/
-		`SELECT *
-		FROM users`,                                        
+      `INSERT INTO users
+		 VALUES('0', 'Testing')`,
+
       function(err, result) {
         if (err) {
           console.error(err.message);
           doRelease(connection);
           return;
         }
-        console.log(result.rows);
-	//doRelease(connection);
+        connection.commit(
+          function(err) {
+            if (err) console.error(err.message);
+            connection.close(function(err) {
+              if (err) console.error(err);
+            });
+          });
       });
+      //doRelease(connection);
   });
 
-function doRelease(connection){
-    connection.close(
-	function(err) {
-	    if (err)
-		console.error(err.message);
-	    });
+function doRelease(connection) {
+  connection.close(
+    function(err) {
+      if (err)
+        console.error(err.message);
+    });
 }
 
 
@@ -96,7 +86,7 @@ var stateKey = 'spotify_auth_state';
 var app = express();
 
 app.use(express.static(__dirname + '/public'))
-   .use(cookieParser());
+  .use(cookieParser());
 
 app.get('/login', function(req, res) {
 
@@ -148,11 +138,13 @@ app.get('/callback', function(req, res) {
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
-            refresh_token = body.refresh_token;
+          refresh_token = body.refresh_token;
 
         var options = {
           url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
+          headers: {
+            'Authorization': 'Bearer ' + access_token
+          },
           json: true
         };
 
@@ -183,7 +175,9 @@ app.get('/refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -208,9 +202,10 @@ app.set('view engine', 'html');
 
 //Doesn't display the Hey and Hello there - how does it work with an html file and this route?
 app.get('/about', function(req, res) {
-    res.render('about', {
-	 title: 'Hey', message: 'Hello there!'
-	});
+  res.render('about', {
+    title: 'Hey',
+    message: 'Hello there!'
+  });
 });
 
 console.log('Listening on 8888');
