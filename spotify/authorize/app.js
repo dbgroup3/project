@@ -7,6 +7,10 @@
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
 
+//ERIN
+var oracledb = require('oracledb');
+var http = require('http');
+
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
@@ -15,6 +19,62 @@ var cookieParser = require('cookie-parser');
 var client_id = 'f432f794252040bc94add8bc8576b0c0'; // Your client id
 var client_secret = 'c82121c0b79544d7a32b8579aeee91de'; // Your secret
 var redirect_uri = 'http://35.172.254.68:8888/callback'; // Your redirect uri
+
+
+var engines = require('consolidate'); //Erin
+
+
+//ERIN
+
+oracledb.getConnection(
+    {
+	user : "guest",
+	password : "guest",
+	connectString : "localhost/XE"
+    },
+    function(err, connection) {
+    if (err) {
+      console.error(err.message);
+      return;
+    }
+	 connection.execute(
+		`INSERT INTO users
+		 VALUES('0', 'Testing')`,
+		function(err, result) {
+        if (err) {
+          console.error(err.message);
+          doRelease(connection);
+          return;
+        }
+        console.log(result.rows);
+	//doRelease(connection);
+      });
+    connection.execute(
+      /*`SELECT cust_id, cust_name, city, country
+       FROM customer
+       WHERE cust_id = :id`,
+      [105],  // bind value for :id*/
+		`SELECT *
+		FROM users`,                                        
+      function(err, result) {
+        if (err) {
+          console.error(err.message);
+          doRelease(connection);
+          return;
+        }
+        console.log(result.rows);
+	//doRelease(connection);
+      });
+  });
+
+function doRelease(connection){
+    connection.close(
+	function(err) {
+	    if (err)
+		console.error(err.message);
+	    });
+}
+
 
 /**
  * Generates a random string containing numbers and letters
@@ -139,6 +199,18 @@ app.get('/refresh_token', function(req, res) {
       });
     }
   });
+});
+
+//Should this go here???
+app.set('views', __dirname + '/public');
+app.engine('html', engines.mustache);
+app.set('view engine', 'html');
+
+//Doesn't display the Hey and Hello there - how does it work with an html file and this route?
+app.get('/about', function(req, res) {
+    res.render('about', {
+	 title: 'Hey', message: 'Hello there!'
+	});
 });
 
 console.log('Listening on 8888');
