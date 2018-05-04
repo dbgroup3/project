@@ -13,6 +13,25 @@
         white-space: nowrap;
         width: 500px;
       }
+      body {
+      padding: 20px;
+      background: url(/img/light-grey-terrazzo.png) repeat 0 0;
+      }
+      #search-form, .form-control {
+      margin-bottom: 20px;
+      }
+      .cover {
+      width: 300px;
+      height: 300px;
+      display: inline-block;
+      background-size: cover;
+      }
+      .cover:hover {
+      cursor: pointer;
+      }
+      .cover.playing {
+      border: 5px solid #e45343;
+      }
     </style>
   </head>
 
@@ -21,56 +40,98 @@
       <nav class="navbar navbar-default">
 	<div class="container-fluid">
 	  <div class="navbar-header">
-	    <a class="navbar-brand" href="#">Profile</a>
+	    <a class="navbar-brand" href="#">Connectify</a>
 	  </div>
 	  <div id="navbar" class="navbar-collapse collapse">
 	    <ul class="nav navbar-nav">
+	      <li><a href="/profile">Profile</a></li>
 	      <li><a href="/users">Users</a></li>
+	      <li><a href="/playlist">Playlist</a></li>
 	    </ul>
 	  </div>
 	</div>
       </nav>
-      <div id="login">
-        <h1>Welcome to your Personalized DJ!</h1>
+      <div id="login" style="text-align: center">
+        <h1 style="color: #5DA2D5">Welcome to Connectify!!</h1>
         <p>To continue, first log into Spotify</p>
-        <a href="/login" class="btn btn-primary">Connect to Spotify</a>
+        <a href="/login" class="btn btn-primary" >Connect to Spotify</a>
       </div>
-      <div id="loggedin">
+      <div id="loggedin">	  
         <div id="user-profile">
         </div>
-        <div id="oauth">
+        <!--div id="oauth">
         </div>
         <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
-      </div>
-    </div>
 
+	<br><br>
+
+      </div-->
+
+
+
+    <!-- loaded from external.js -->
     <script id="user-profile-template" type="text/x-handlebars-template">
-      <h1>Logged in as {{display_name}}</h1>
+      <h1 style="text-align: center">Welcome, {{display_name}}</h1>
       <div class="media">
-        <div class="pull-left">
+        <!--div class="pull-left">
           <img class="media-object" width="150" src="{{images.0.url}}" />
-        </div>
+        </div-->
         <div class="media-body">
           <dl class="dl-horizontal">
-            <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
+            <!--dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
             <dt>Id</dt><dd>{{id}}</dd>
             <dt>Email</dt><dd>{{email}}</dd>
             <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
             <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
             <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
-            <dt>Country</dt><dd>{{country}}</dd>
+            <dt>Country</dt><dd>{{country}}</dd-->
           </dl>
         </div>
       </div>
     </script>
 
-    <script id="oauth-template" type="text/x-handlebars-template">
+    <!--script id="oauth-template" type="text/x-handlebars-template">
     <h2>oAuth info</h2>
       <dl class="dl-horizontal">
         <dt>Access token</dt><dd class="text-overflow">{{access_token}}</dd>
         <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
       </dl>
-    </script>
+    </script-->
+	<div class="row">
+	  <div class="col-sm-6 col-md-4">
+	    <div class="thumbnail">
+	      <img src="/img/pfk.jpg" style="height: 200px; width: 100%">
+	      <div class="caption">
+		<h3 style="text-align: center">Compare your top music with other users</h3>
+		<p>See top artists and songs you have in common with other users of our application. Create a playlist from the results!</p>
+		<p style="text-align: center"><a href="/users" class="btn btn-primary" role="button">Compare Music</a></p>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-sm-6 col-md-4">
+	    <div class="thumbnail">
+	      <img src="/img/disco.png" style="height: 200px; width: 100%">
+	      <div class="caption">
+		<h3 style="text-align: center">View your Music Profile</h3>
+		<p>View your top artists and songs from Spotify, analyze trends, and explore new music based off of these preferences.</p>
+		<p style="text-align: center"><a href="/profile" class="btn btn-primary" role="button">View Profile</a></p>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="col-sm-6 col-md-4">
+	    <div class="thumbnail">
+	      <img src="/img/spotify-millennials1.jpg" style="height: 200px; width: 100%">
+	      <div class="caption">
+		<h3 style="text-align: center">View your collaborative playlists</h3>
+		<p>We'll generate a playlist for you and another user on our site based on your preferences. Listen to and keep track of these here.</p>
+		<p style="text-align: center"><a href="/playlist" class="btn btn-primary" role="button">View Playlists</a></p>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>      
+    </div>
+
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>

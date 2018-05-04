@@ -1,3 +1,128 @@
-<p>
-user_info
-</p>
+<!doctype html>
+<html>
+  <head>
+    <title>Users</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      body {
+      padding: 20px;
+      background: url(/img/light-grey-terrazzo.png) repeat 0 0;
+      }
+      #search-form, .form-control {
+      margin-bottom: 20px;
+      }
+      .cover {
+      width: 300px;
+      height: 300px;
+      display: inline-block;
+      background-size: cover;
+      }
+      .cover:hover {
+      cursor: pointer;
+      }
+      .cover.playing {
+      border: 5px solid #e45343;
+      }
+      .fade.in {
+      opacity: 1;
+      }
+      .modal.in .modal-dialog {
+      -webkit-transform: translate(0, 0);
+      -o-transform: translate(0, 0);
+      transform: translate(0, 0);
+      }
+      .modal-backdrop.in {
+      opacity: 0.5;
+      }
+      .thumbnail {
+      /*background: url(/img/vintage-concrete.png) repeat 0 0;*/
+      }
+      .caption {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      }
+      
+    </style>
+  </head>
+
+<body>
+    <div class="container">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Connectify</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+	      <li><a href="/profile">Profile</a></li>
+              <li><a href="/users">Users</a></li>
+	      <li><a href="/playlist">Playlist</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container">
+	<h3 style="text-align: center">Click on a username to learn more about how your taste aligns with theirs!</h3>
+	<div class="row">
+	  <div class="col-md-6">
+	    <div id="usernames"></div>
+	  </div>
+	  <div class="col-md-6">
+	    <div id="othername">
+	      <h3 id="h2-other" style="text-align: center"></h3>
+	    </div>
+	    <div id="shared">
+	    </div>
+	    <div id="commonsongs">
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      <script id="usernames-template" type="text/x-handlebars-template">
+	{{#each spotify_name}}
+	<div class="col-md-6">
+	  <div class="thumbnail" style="border-style: none;">
+	    <img src="img/disco.png" onload="this.onload=null; this.src=displayImage();" style="height: 75%; width: 75%" onclick="myTest('{{.}}'); getUser('{{.}}'); getUserForPlaylist('{{.}}');">
+	    <!-- getTopSongs('{{.}}'); -->
+	    <div class="caption">
+	      <p style="text-align: center">{{.}}</p>
+	    </div>
+	  </div>
+	</div>
+	{{/each}}
+      </script>
+
+
+      <script id="shared-template" type="text/x-handlebars-template">
+	<div style="text-align: center">
+	  {{#each shared_artists}}
+	  <p style="text-align: center">{{.}}</p>
+	  {{/each}}
+	  <button id="test-button" type="button" class="btn btn-primary" onclick="getPlaylist(); playlistClick();">Generate Playlist</button>
+		<div id="myModal" class="modal">
+		 <div class="modal-content">
+		  <span class="close">&times;</span>
+		  <p>Playlist Generated.</p>
+		 </div>
+		</div>
+	</div>
+      </script>
+
+      <!-- could say something like "your top artists at the moment are so and so, theirs is so and so" -->
+      <!-- include button for generating playlist -->
+      <script id="commonsongs-template" type="text/x-handlebars-template">
+	
+      </script>
+
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="users.js"></script>    
+  </body>
+</html>
+

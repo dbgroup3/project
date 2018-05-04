@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>User Profile</title>
+  <!--script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+    body {
+      padding: 20px;
+    background: url(/img/light-grey-terrazzo.png) repeat 0 0;
+    }
+
+    #search-form,
+    .form-control {
+      margin-bottom: 20px;
+    }
+
+    .cover {
+      width: 300px;
+      height: 300px;
+      display: inline-block;
+      background-size: cover;
+    }
+
+    .cover:hover {
+      cursor: pointer;
+    }
+
+    .cover.playing {
+      border: 5px solid #e45343;
+    }
+
+    .fade.in {
+      opacity: 1;
+    }
+
+    .modal.in .modal-dialog {
+      -webkit-transform: translate(0, 0);
+      -o-transform: translate(0, 0);
+      transform: translate(0, 0);
+    }
+
+    .modal-backdrop.in {
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">Connectify</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/users">Users</a></li>
+	    <li><a href="/playlist">Playlist</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <br><br>
+
+    <h1>Your Top Artists</h1>
+    <div id="personal"></div>
+  </div>
+  </div>
+
+  <script id="personal-template" type="text/x-handlebars-template">
+    <div class="row">
+      {{#each items}}
+      <div class="col-sm-3 topArtist" id="{{id}}">
+        <div id="dialog-{{id}}" title="More on {{name}}" style="display: none;">
+            <h1>{{name}}</h1>
+            <hr>
+                <p><b>Global Followers:</b> {{followers.total}} </p>
+                <p><b>Genres:</b>
+                  {{#each genres}} {{this}} - {{/each}}
+                </p>
+        </div>
+        {{#each images}}
+        <!-- gets largest img -->
+        {{#if @first}}
+
+        <img src="{{url}}" style="width:100%" /> {{/if}} {{/each}}
+        <p><b>{{name}}</b></p>
+        <p>Popularity: {{popularity}} </p>
+
+
+      </div>
+      {{#ifThird @index }}
+    </div>
+
+    <div class="row">
+      {{/ifThird}} {{/each}}
+    </div>
+
+  </script>
+  <div id="dialog" title="Additonal Information">
+  </div>
+  </div>
+
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+  <!-- bootstrap -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+  <script src="profile.js"></script>
+</body>
+
+</html>

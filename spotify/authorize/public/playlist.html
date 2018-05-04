@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test Page</title>
+    <!--script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      body {
+      padding: 20px;
+      background: url(/img/light-grey-terrazzo.png) repeat 0 0;
+      }
+      #search-form, .form-control {
+      margin-bottom: 20px;
+      }
+      .cover {
+      width: 300px;
+      height: 300px;
+      display: inline-block;
+      background-size: cover;
+      }
+      .cover:hover {
+      cursor: pointer;
+      }
+      .cover.playing {
+      border: 5px solid #e45343;
+      }
+.fade.in {
+  opacity: 1;
+}
+.modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.modal-backdrop.in {
+  opacity: 0.5;
+}
+
+    </style>
+  </head>
+
+<body>
+    <div class="container">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Connectify</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+	      <li><a href="/profile">Profile</a></li>
+              <li><a href="/users">Users</a></li>
+	      <li><a href="/playlist">Playlist</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container">
+
+	<div id="playlists"></div>
+      </div>
+
+    <script id="playlists-template" type="text/x-handlebars-template">
+        {{#each this}}
+          <h2>Playlist #{{@index}} with {{user}}</h2>
+          <hr>
+          <ul>
+          {{#each songs}}
+            <li><em>{{name}}</em> by {{artist}}</li>
+          {{/each}}
+        </ul>
+        {{/each}}
+
+        <button type="button" class="btn btn-primary" onclick="doSpotifyPost({{uid}}, 'Playlist #{{@index}} with {{user}}');">Post to Spotify</button>
+    </script>
+
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="playlist.js"></script>
+  </body>
+</html>
